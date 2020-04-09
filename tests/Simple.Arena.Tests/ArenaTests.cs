@@ -4,16 +4,7 @@ using Xunit;
 namespace Simple.Arena.Tests
 {
     public class ArenaTests
-    {
-        [Fact]
-        public void Can_allocate_and_use_memory()
-        {
-            using var arena = new Arena();
-            var array = arena.AllocateBytes(100).AsSpan();
-            
-            for(byte i = 0; i < array.Length; i++)
-                array[i] = i;
-        }
+    {     
 
         [Fact]
         public void Can_allocate_span_and_use_memory()
@@ -46,21 +37,11 @@ namespace Simple.Arena.Tests
         }
 
         [Fact]
-        public void Should_fail_to_allocate_on_disposed_allocatebytes()
-        {
-            using var arena = new Arena();
-
-            arena.Dispose();
-
-            Assert.Throws<ObjectDisposedException>(() => arena.AllocateBytes(100));
-        }
-
-        [Fact]
         public void Should_take_into_account_type_sizes()
         {
             using var arena = new Arena(101);
 
-            //the initial size is in bytes, but 100 floats is much more than 101 bytes...
+            //the initial size is in bytes, but memory needed for 100 floats is much more than 101 bytes...
             Assert.Throws<OutOfMemoryException>(() => arena.Allocate<float>(100));
         }
 
@@ -78,10 +59,10 @@ namespace Simple.Arena.Tests
         {
             using var arena = new Arena(1024);
 
-            var segment1 = arena.AllocateBytes(1000);
-            var segment2 = arena.AllocateBytes(24);
+            var segment1 = arena.Allocate<byte>(1000);
+            var segment2 = arena.Allocate<byte>(24);
 
-            Assert.Throws<OutOfMemoryException>(() => arena.AllocateBytes(1));
+            Assert.Throws<OutOfMemoryException>(() => arena.Allocate<byte>(1));
         }
 
         [Fact]
@@ -89,10 +70,10 @@ namespace Simple.Arena.Tests
         {
             using var arena = new Arena(1024);
 
-            var segment1 = arena.AllocateBytes(1000);
-            var segment2 = arena.AllocateBytes(24);
+            var segment1 = arena.Allocate<byte>(1000);
+            var segment2 = arena.Allocate<byte>(24);
 
-            Assert.False(arena.TryAllocateBytes(1, out _));
+            Assert.False(arena.TryAllocate<byte>(1, out _));
         }
 
          [Fact]
@@ -100,8 +81,8 @@ namespace Simple.Arena.Tests
         {
             using var arena = new Arena(1024);
 
-            var segment1 = arena.AllocateBytes(1000);
-            var segment2 = arena.AllocateBytes(24);
+            var segment1 = arena.Allocate<byte>(1000);
+            var segment2 = arena.Allocate<byte>(24);
 
             Assert.False(arena.TryAllocate<byte>(1, out _));
         }

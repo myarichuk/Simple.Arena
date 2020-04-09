@@ -11,7 +11,7 @@
     /// * If the Arena is not disposed, memory will leak
     /// * The Arena is NOT thread safe
     /// </remarks>
-    public unsafe class Arena : IDisposable
+    public unsafe class Arena : IArena
     {
         private byte* _memoryBlock;
         private const int DefaultBlockSize = 1024 * 1024 * 1; //default size = 1MB
@@ -52,32 +52,6 @@
         /// <summary>
         /// Allocate memory segment from Arena's pre-allocated block
         /// </summary>
-        /// <param name="sizeInBytes">size of the segment to allocate (in bytes)</param>
-        /// <param name="segment">pointer to allocated segment and its size in bytes</param>
-        /// <returns>true if allocation succeeded, false otherwise</returns>
-        public bool TryAllocateBytes(int sizeInBytes, out MemorySegment segment)
-        {
-            segment = default;
-            if (sizeInBytes + AllocatedBytes > TotalBytes)
-                return false;
-
-            try
-            {
-                segment = AllocateInternal(sizeInBytes);
-            }
-            catch (OutOfMemoryException)
-            {
-                return false;
-            }
-
-            return true;
-        }
-
-#if NETSTANDARD2_1
-
-        /// <summary>
-        /// Allocate memory segment from Arena's pre-allocated block
-        /// </summary>
         /// <param name="amountOfTs">size of the segment to allocate (in bytes)</param>
         /// <param name="segment">pointer to allocated segment and its size in bytes</param>
         /// <returns>true if allocation succeeded, false otherwise</returns>
@@ -106,8 +80,8 @@
         public Span<T> Allocate<T>(int amountOfTs) where T : unmanaged
         {
             if (IsDisposed)
-                Throw.ObjectDisposed(nameof(Arena));   
-            
+                Throw.ObjectDisposed(nameof(Arena));
+
             int allocationSize = amountOfTs * Unsafe.SizeOf<T>();
             if (allocationSize + AllocatedBytes > TotalBytes)
                 Throw.OutOfMemory($"Not enough memory left in the Arena. Asked for {allocationSize} bytes, but only {TotalBytes - AllocatedBytes} bytes is available");
@@ -116,24 +90,6 @@
             AllocatedBytes += allocationSize;
 
             return segment;
-        }
-
-#endif
-
-        /// <summary>
-        /// Allocate memory segment from Arena's pre-allocated block
-        /// </summary>
-        /// <param name="sizeInBytes">amount of bytes to allocate</param>
-        /// <returns>pointer to allocated segment and its size in bytes</returns>
-        public MemorySegment AllocateBytes(int sizeInBytes)
-        {
-            if (IsDisposed)
-                Throw.ObjectDisposed(nameof(Arena));
-
-            if (sizeInBytes + AllocatedBytes > TotalBytes)
-                Throw.OutOfMemory($"Not enough memory left in the Arena. Asked for {sizeInBytes} bytes, but only {TotalBytes - AllocatedBytes} bytes is available");
-
-            return AllocateInternal(sizeInBytes);
         }
 
         private MemorySegment AllocateInternal(int sizeInBytes)
@@ -145,7 +101,7 @@
         }
 
         /// <summary>
-        /// Reset the Arena, useful to reuse the Arena's in a post
+        /// Reset the Arena, useful to reuse the Arena's in an object pool
         /// </summary>
         public void Reset()
         {
