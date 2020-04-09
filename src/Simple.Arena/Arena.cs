@@ -52,18 +52,18 @@
         /// <summary>
         /// Allocate memory segment from Arena's pre-allocated block
         /// </summary>
-        /// <param name="size">size of the segment to allocate (in bytes)</param>
+        /// <param name="sizeInBytes">size of the segment to allocate (in bytes)</param>
         /// <param name="segment">pointer to allocated segment and its size in bytes</param>
         /// <returns>true if allocation succeeded, false otherwise</returns>
-        public bool TryAllocateBytes(int size, out MemorySegment segment)
+        public bool TryAllocateBytes(int sizeInBytes, out MemorySegment segment)
         {
             segment = default;
-            if (size + AllocatedBytes > TotalBytes)
+            if (sizeInBytes + AllocatedBytes > TotalBytes)
                 return false;
 
             try
             {
-                segment = AllocateInternal(size);
+                segment = AllocateInternal(sizeInBytes);
             }
             catch (OutOfMemoryException)
             {
@@ -78,16 +78,16 @@
         /// <summary>
         /// Allocate memory segment from Arena's pre-allocated block
         /// </summary>
-        /// <param name="size">size of the segment to allocate (in bytes)</param>
+        /// <param name="amountOfTs">size of the segment to allocate (in bytes)</param>
         /// <param name="segment">pointer to allocated segment and its size in bytes</param>
         /// <returns>true if allocation succeeded, false otherwise</returns>
-        public bool TryAllocate<T>(int size, out Span<T> segment) where T : unmanaged
+        public bool TryAllocate<T>(int amountOfTs, out Span<T> segment) where T : unmanaged
         {
             if (IsDisposed)
                 Throw.ObjectDisposed(nameof(Arena));
 
             segment = default;
-            int allocationSize = size * Unsafe.SizeOf<T>();
+            int allocationSize = amountOfTs * Unsafe.SizeOf<T>();
             if (allocationSize + AllocatedBytes > TotalBytes)
                 return false;
 
@@ -101,14 +101,14 @@
         /// Allocate memory segment from Arena's pre-allocated block
         /// </summary>
         /// <typeparam name="T">type of each item to allocate in the memory segment</typeparam>
-        /// <param name="size">amount of items of T to allocate</param>
+        /// <param name="amountOfTs">amount of items of T to allocate</param>
         /// <returns>pointer to allocated segment and its size in bytes</returns>
-        public Span<T> Allocate<T>(int size) where T : unmanaged
+        public Span<T> Allocate<T>(int amountOfTs) where T : unmanaged
         {
             if (IsDisposed)
                 Throw.ObjectDisposed(nameof(Arena));   
             
-            int allocationSize = size * Unsafe.SizeOf<T>();
+            int allocationSize = amountOfTs * Unsafe.SizeOf<T>();
             if (allocationSize + AllocatedBytes > TotalBytes)
                 Throw.OutOfMemory($"Not enough memory left in the Arena. Asked for {allocationSize} bytes, but only {TotalBytes - AllocatedBytes} bytes is available");
 
@@ -123,23 +123,23 @@
         /// <summary>
         /// Allocate memory segment from Arena's pre-allocated block
         /// </summary>
-        /// <param name="size">amount of bytes to allocate</param>
+        /// <param name="sizeInBytes">amount of bytes to allocate</param>
         /// <returns>pointer to allocated segment and its size in bytes</returns>
-        public MemorySegment AllocateBytes(int size)
+        public MemorySegment AllocateBytes(int sizeInBytes)
         {
             if (IsDisposed)
                 Throw.ObjectDisposed(nameof(Arena));
 
-            if (size + AllocatedBytes > TotalBytes)
-                Throw.OutOfMemory($"Not enough memory left in the Arena. Asked for {size} bytes, but only {TotalBytes - AllocatedBytes} bytes is available");
+            if (sizeInBytes + AllocatedBytes > TotalBytes)
+                Throw.OutOfMemory($"Not enough memory left in the Arena. Asked for {sizeInBytes} bytes, but only {TotalBytes - AllocatedBytes} bytes is available");
 
-            return AllocateInternal(size);
+            return AllocateInternal(sizeInBytes);
         }
 
-        private MemorySegment AllocateInternal(int size)
+        private MemorySegment AllocateInternal(int sizeInBytes)
         {
-            var segment = new MemorySegment(_memoryBlock + AllocatedBytes, size);
-            AllocatedBytes += size;
+            var segment = new MemorySegment(_memoryBlock + AllocatedBytes, sizeInBytes);
+            AllocatedBytes += sizeInBytes;
 
             return segment;
         }
