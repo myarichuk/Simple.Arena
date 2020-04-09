@@ -1,8 +1,8 @@
-# Arena Allocator
+### Arena Allocator
 Simple implementation of Arena allocator, an unmanaged memory allocator that has very cheap allocations of O(1) complexity, but for performance sake, doesn't allow freeing of allocated memory segments.
 Useful for things like allocating temporary, short-lived buffers for handling a server request.
 
-# Example
+### Example
 Usage of ``Arena`` allocator is pretty self explanatory. Initialize it, then use it to allocate. Calling ``Dispose()`` frees all allocated memory.
 
 ```cs
