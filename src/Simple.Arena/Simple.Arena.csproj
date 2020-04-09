@@ -2,6 +2,14 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
+    <Authors>Michael Yarichuk</Authors>
+    <Description>An implementation of linear/arena allocator. Mostly useful for short-lived allocations.</Description>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+    <Copyright>Michael Yarichuk</Copyright>
+    <RepositoryUrl>https://github.com/myarichuk/Simple.Arena</RepositoryUrl>
+    <RepositoryType>Github</RepositoryType>
+    <PackageTags>Arena Allocator, Arena, Allocator</PackageTags>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.0|AnyCPU'">
@@ -14,6 +22,13 @@
 
   <ItemGroup>
     <PackageReference Include="System.Memory" Version="4.5.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\LICENSE.md">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>
