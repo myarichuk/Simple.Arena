@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-using System.Text;
-
-namespace Simple.Arena
+﻿namespace Simple.Arena
 {
+    using System;
+    using System.Runtime.CompilerServices;
+    using System.Runtime.InteropServices;
+
     /// <summary>
     /// Simple arena memory allocator. Works by allocating a block, then handing parts of the block as needed. When disposed, frees all memory at once
     /// </summary>
@@ -44,7 +42,7 @@ namespace Simple.Arena
         /// <param name="initialBlockSize">Size of the memory block the allocator will use</param>
         public Arena(int initialBlockSize = DefaultBlockSize)
         {
-            if(initialBlockSize <= 0)
+            if (initialBlockSize <= 0)
                 Throw.ArgumentOutOfRange(nameof(initialBlockSize), "The argument must be larger than zero");
 
             _memoryBlock = (byte*)Marshal.AllocHGlobal(initialBlockSize).ToPointer();
@@ -67,7 +65,7 @@ namespace Simple.Arena
             {
                 segment = AllocateInternal(size);
             }
-            catch(OutOfMemoryException)
+            catch (OutOfMemoryException)
             {
                 return false;
             }
@@ -75,7 +73,7 @@ namespace Simple.Arena
             return true;
         }
 
-        #if NETSTANDARD2_1
+#if NETSTANDARD2_1
 
         /// <summary>
         /// Allocate memory segment from Arena's pre-allocated block
@@ -120,7 +118,7 @@ namespace Simple.Arena
             return segment;
         }
 
-        #endif
+#endif
 
         /// <summary>
         /// Allocate memory segment from Arena's pre-allocated block
@@ -153,7 +151,7 @@ namespace Simple.Arena
         {
             if (IsDisposed)
                 Throw.ObjectDisposed(nameof(Arena));
-            
+
             ResetCount++;
             Unsafe.InitBlock(_memoryBlock, 0, (uint)TotalBytes);
             AllocatedBytes = 0;
@@ -161,7 +159,7 @@ namespace Simple.Arena
 
         protected virtual void Dispose(bool isDisposing)
         {
-            if(!IsDisposed)
+            if (!IsDisposed)
             {
                 Marshal.FreeHGlobal(new IntPtr(_memoryBlock));
                 AllocatedBytes = 0;
