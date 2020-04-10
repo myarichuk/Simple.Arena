@@ -11,7 +11,7 @@
     /// * If the Arena is not disposed, memory will leak
     /// * The Arena is NOT thread safe
     /// </remarks>
-    public unsafe class Arena : IArena
+    public unsafe class Arena : IDisposable
     {
         private byte* _memoryBlock;
         private const int DefaultBlockSize = 1024 * 1024 * 1; //default size = 1MB

@@ -3,9 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30002.166
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Simple.Arena", "src\Simple.Arena\Simple.Arena.csproj", "{B83C74F1-2E0D-4494-83D9-E92475805BBD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Simple.Arena", "src\Simple.Arena\Simple.Arena.csproj", "{B83C74F1-2E0D-4494-83D9-E92475805BBD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Simple.Arena.Tests", "tests\Simple.Arena.Tests\Simple.Arena.Tests.csproj", "{D52288FD-EE9F-4B50-9044-38EC206B49B0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Simple.Arena.Tests", "tests\Simple.Arena.Tests\Simple.Arena.Tests.csproj", "{D52288FD-EE9F-4B50-9044-38EC206B49B0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Misc", "Misc", "{F6148673-3C1E-40C6-ACB7-C561703A2B8E}"
+	ProjectSection(SolutionItems) = preProject
+		LICENSE.md = LICENSE.md
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

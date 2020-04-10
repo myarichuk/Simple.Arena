@@ -3,7 +3,10 @@ Simple implementation of Arena allocator, an unmanaged memory allocator that has
 Useful for things like allocating temporary, short-lived buffers for handling a server request.
 
 ### Example
-Usage of ``Arena`` allocator is pretty self explanatory. Initialize it, then use it to allocate. Calling ``Dispose()`` frees all allocated memory.
+
+Usage of ``Arena`` allocator is pretty self explanatory. Initialize it, then use it to allocate. Calling ``Dispose()`` frees all allocated memory.  
+Note that ``Arena`` allocates an unmanaged memory block on initialization and each call to ``Allocate<T>()`` allocates part of that initial block. 
+When there is not enough memory left in the initial block, an ``OutOfMemoryException`` will be thrown.
 
 ```cs
 //initialize Arena allocator with 4MB of block to use
@@ -14,5 +17,5 @@ using var arena = new Arena(initialBlockSize: 1024 * 1024 * 4);
 Span<float> floatArray = arena.Allocate<float>(100);
 
 //from the memory that is left after previous allocation allocate 100 bytes
-Span<byte> byteArray = arena.AllocateBytes(100).AsSpan(); 
+Span<byte> byteArray = arena.Allocate<byte>(100); 
 ```
