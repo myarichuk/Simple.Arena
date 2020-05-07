@@ -4,7 +4,7 @@
     <TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
     <Authors>Michael Yarichuk</Authors>
     <Description>An implementation of linear/arena allocator. Mostly useful for short-lived allocations.</Description>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
     <Copyright>Michael Yarichuk</Copyright>
     <RepositoryUrl>https://github.com/myarichuk/Simple.Arena</RepositoryUrl>
