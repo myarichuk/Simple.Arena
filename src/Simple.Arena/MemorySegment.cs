@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 
 namespace Simple.Arena
 {
-    public unsafe readonly struct MemorySegment
+    internal unsafe readonly struct MemorySegment
     {
         public readonly byte* Ptr;
         public readonly int Length;
