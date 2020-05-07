@@ -2,12 +2,12 @@ assembly-versioning-scheme: MajorMinorPatch
 next-version: 1.0.0
 branches:
   develop:
-    mode: ContinuousDelivery
-    tag: alpha
+    mode: ContinuousDemployment
+    tag: beta
     is-release-branch: false
   master:
     regex: ^master
-    mode: ContinuousDelivery
+    mode: ContinuousDeployment
     tag: ''
     increment: Patch
     prevent-increment-of-merged-branch-version: true
