@@ -28,3 +28,12 @@ test_script:
 - cmd: dotnet test
 artifacts:
 - path: artifacts/*
+
+deploy_script:
+- ps: >-
+
+    if ($env:APPVEYOR_PULL_REQUEST_HEAD_COMMIT -eq "false") {
+
+       Write-Host "Not a pull request!"
+
+    }
