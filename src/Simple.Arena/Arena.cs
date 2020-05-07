@@ -13,7 +13,7 @@
     /// </remarks>
     public unsafe class Arena : IDisposable
     {
-        private byte* _memoryBlock;
+        private readonly byte* _memoryBlock;
         private const int DefaultBlockSize = 1024 * 1024 * 1; //default size = 1MB
 
         /// <summary>
@@ -36,17 +36,19 @@
         /// </summary>
         public int ResetCount { get; private set; }
 
+        public event Action Disposed;
+
         /// <summary>
         /// Initialize the Arena allocator. 
         /// </summary>
-        /// <param name="initialBlockSize">Size of the memory block the allocator will use</param>
-        public Arena(int initialBlockSize = DefaultBlockSize)
+        /// <param name="initialSize">Size of the memory block the allocator will use</param>
+        public Arena(int initialSize = DefaultBlockSize)
         {
-            if (initialBlockSize <= 0)
-                Throw.ArgumentOutOfRange(nameof(initialBlockSize), "The argument must be larger than zero");
+            if (initialSize <= 0)
+                Throw.ArgumentOutOfRange(nameof(initialSize), "The argument must be larger than zero");
 
-            _memoryBlock = (byte*)Marshal.AllocHGlobal(initialBlockSize).ToPointer();
-            TotalBytes = initialBlockSize;
+            _memoryBlock = (byte*)Marshal.AllocHGlobal(initialSize).ToPointer();
+            TotalBytes = initialSize;
         }
 
         /// <summary>
@@ -120,6 +122,8 @@
                 Marshal.FreeHGlobal(new IntPtr(_memoryBlock));
                 AllocatedBytes = 0;
                 IsDisposed = true;
+
+                Disposed?.Invoke();
             }
         }
 

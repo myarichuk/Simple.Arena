@@ -11,7 +11,7 @@ When there is not enough memory left in the initial block, an ``OutOfMemoryExcep
 ```cs
 //initialize Arena allocator with 4MB of block to use
 //note: this allocates umanaged memory
-using var arena = new Arena(initialBlockSize: 1024 * 1024 * 4);
+using var arena = new Arena(initialSize: 1024 * 1024 * 4);
 
 //from the initial block of 4MB, allocate enough memory to handle array of 100 floats
 Span<float> floatArray = arena.Allocate<float>(100);

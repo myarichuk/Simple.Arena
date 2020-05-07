@@ -1,0 +1,26 @@
+init:
+  - git config --global core.autocrlf input
+
+skip_tags: true
+image: Visual Studio 2019
+environment:  
+  BENCHMARKS: on
+    
+install:
+  - cmd: choco install gitversion.portable -y
+
+before_build:
+  - ps: gitversion /l console /output buildserver
+
+build:
+  verbosity: detailed
+  
+build_script:
+- cmd: dotnet restore
+- cmd: dotnet build
+- cmd: dotnet pack -c Release --output %APPVEYOR_BUILD_FOLDER%/artifacts/
+test_script:
+- cmd: dotnet test
+artifacts:
+- path: artifacts/*
+
