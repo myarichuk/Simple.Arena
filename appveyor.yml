@@ -24,7 +24,11 @@ build:
 dotnet_csproj:
   patch: true
   file: '**\*.csproj'
-  version: '${GitVersion_NuGetVersionV2}'
+  version: '${GitVersion_MajorMinorPatch}'
+  package_version: '${GitVersion_MajorMinorPatch}'
+  assembly_version: '${GitVersion_MajorMinorPatch}'
+  file_version: '${GitVersion_MajorMinorPatch}'
+  informational_version: '${GitVersion_MajorMinorPatch}'
 
 build_script:
 - cmd: dotnet build -c Release
