@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 namespace Simple.Arena
@@ -9,6 +10,12 @@ namespace Simple.Arena
         {
             fixed(T* ptr = &MemoryMarshal.GetReference(span))
                 return new IntPtr(ptr);
+        }
+
+        public unsafe static Span<T> ToSpan<T>(this IntPtr ptr) where T: unmanaged
+        {
+            byte* p = (byte*)ptr.ToPointer();
+            return MemoryMarshal.Cast<byte, T>(new Span<byte>(p, Unsafe.SizeOf<T>()));
         }
     }
 }
