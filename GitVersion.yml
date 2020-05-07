@@ -2,7 +2,7 @@ assembly-versioning-scheme: MajorMinorPatch
 next-version: 1.0.0
 branches:
   develop:
-    mode: ContinuousDemployment
+    mode: ContinuousDeployment
     tag: beta
     is-release-branch: false
   master:
