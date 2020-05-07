@@ -23,7 +23,7 @@ build:
   
 build_script:
 - cmd: dotnet build -c Release
-- cmd: dotnet pack .\src\Simple.Arena\Simple.Arena.csproj -c Release -p:Version {GitVersion_NuGetVersionV2} --output %APPVEYOR_BUILD_FOLDER%/artifacts/
+- ps: dotnet pack .\src\Simple.Arena\Simple.Arena.csproj -c Release -p:Version $env:GitVersion_NuGetVersionV2 --output $env:APPVEYOR_BUILD_FOLDER/artifacts/
 test_script:
 - cmd: dotnet test
 artifacts:
@@ -31,9 +31,6 @@ artifacts:
 
 deploy_script:
 - ps: >-
-
     if ($env:APPVEYOR_PULL_REQUEST_HEAD_COMMIT -eq "false") {
-
        Write-Host "Not a pull request!"
-
     }
