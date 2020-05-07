@@ -17,10 +17,9 @@ build:
   
 build_script:
 - cmd: dotnet restore
-- cmd: dotnet build
+- cmd: dotnet build -c Release
 - cmd: dotnet pack -c Release --output %APPVEYOR_BUILD_FOLDER%/artifacts/
 test_script:
 - cmd: dotnet test
 artifacts:
 - path: artifacts/*
-
