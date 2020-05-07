@@ -5,7 +5,11 @@ skip_tags: true
 image: Visual Studio 2019
 environment:  
   BENCHMARKS: on
-    
+
+branches:
+  only:
+    - master    
+
 install:
   - cmd: choco install gitversion.portable -y
 
