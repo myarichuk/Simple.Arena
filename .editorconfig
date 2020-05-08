@@ -1,0 +1,4 @@
+﻿[*.cs]
+
+# S3881: "IDisposable" should be implemented correctly
+dotnet_diagnostic.S3881.severity = suggestion
