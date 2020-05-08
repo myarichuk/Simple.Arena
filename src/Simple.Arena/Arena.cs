@@ -36,7 +36,9 @@
         /// </summary>
         public int ResetCount { get; private set; }
 
-        public event Action Disposed;
+        public event Action OnDispose;
+
+        public event Action OnReset;
 
         /// <summary>
         /// Initialize the Arena allocator. 
@@ -113,6 +115,7 @@
             ResetCount++;
             Unsafe.InitBlock(_memoryBlock, 0, (uint)TotalBytes);
             AllocatedBytes = 0;
+            OnReset?.Invoke();
         }
 
         protected virtual void Dispose(bool isDisposing)
@@ -123,7 +126,7 @@
                 AllocatedBytes = 0;
                 IsDisposed = true;
 
-                Disposed?.Invoke();
+                OnDispose?.Invoke();
             }
         }
 
